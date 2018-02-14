@@ -47,9 +47,9 @@ public class PlazaImpl implements Plaza {
         if (!isOpen()) {
             throw new PlazaIsClosedException();
         }
-        for (int i = 0;i < shops.size();i++) {
-            if (shops.get(i).getName().equals(name)) {
-                return shops.get(i);
+        for (Shop shop : shops) {
+            if (shop.getName().equals(name)) {
+                return shop;
             }
         }
         throw new NoSuchShopException();
