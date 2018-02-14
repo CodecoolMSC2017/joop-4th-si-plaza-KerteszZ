@@ -1,8 +1,6 @@
 package com.codecool.plaza.api;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ShopImpl implements Shop {
     private String name;
@@ -44,33 +42,95 @@ public class ShopImpl implements Shop {
     }
 
     @Override
-    public Product findByName(String name) throws NoSuchShopException, ShopIsClosedException {
-        return null;
+    public Product findByName(String name) throws NoSuchProductException, ShopIsClosedException {
+        if (!isOpen()) throw new ShopIsClosedException();
+        for (ShopEntryImpl product:products.values()) {
+            if(product.getProduct().getName().equals(name)){
+                return product.getProduct();
+            }
+        }
+        throw new NoSuchProductException();
+
     }
 
     @Override
     public boolean hasProduct(long barcode) throws ShopIsClosedException {
+        if(!isOpen()) throw new ShopIsClosedException();
+        for(ShopEntryImpl product:products.values()){
+            if(product.getProduct().getBarcode() == barcode){
+                return true;
+            }
+        }
         return false;
     }
 
     @Override
     public void addNewProduct(Product product, int quantity, float price) throws ProductAlreadyExistsException, ShopIsClosedException {
+        if (!isOpen()) throw new ShopIsClosedException();
 
+        ShopEntryImpl newProduct = new ShopEntryImpl(product,quantity,price);
+        if(products.values().contains(newProduct)) throw new ProductAlreadyExistsException();
+
+        Random randomLong = new Random();
+        long barcode = 900000000 + randomLong.nextInt(100000000);
+        products.put(barcode,newProduct);
     }
 
     @Override
     public void addProduct(long barcode, int quantity) throws NoSuchProductException, ShopIsClosedException {
+        if (!isOpen()) throw new ShopIsClosedException();
+        boolean productFound = false;
+        for(Map.Entry<Long, ShopEntryImpl> entry:products.entrySet()) {
+            long productBarcode = entry.getKey();
+            ShopEntryImpl product = entry.getValue();
+            if(productBarcode == barcode){
+                product.increaseQuantity(quantity);
+                productFound = true;
+                break;
+            }
+        }
+        if(!productFound) throw new NoSuchProductException();
 
     }
 
     @Override
     public Product buyProduct(long barcode) throws NoSuchProductException, OutOfStockException, ShopIsClosedException {
-        return null;
+        if(!isOpen) throw new ShopIsClosedException();
+        Product pr = null;
+
+        for(Map.Entry<Long, ShopEntryImpl> entry:products.entrySet()) {
+            long productBarcode = entry.getKey();
+            ShopEntryImpl product = entry.getValue();
+            if(productBarcode == barcode){
+                if (product.getQuantity() < 1) throw new OutOfStockException();
+                product.decreaseQuantity(1);
+                pr = product.getProduct();
+            }
+        }
+        if(pr == null) throw new NoSuchProductException();
+        return pr;
     }
 
     @Override
     public List<Product> buyProducts(long barcode, int quantity) throws NoSuchProductException, OutOfStockException, ShopIsClosedException {
-        return null;
+        if(!isOpen) throw new ShopIsClosedException();
+        boolean productFound = false;
+        List<Product> productsList = new ArrayList<>();
+        for(Map.Entry<Long, ShopEntryImpl> entry:products.entrySet()) {
+            long productBarcode = entry.getKey();
+            ShopEntryImpl product = entry.getValue();
+            if(productBarcode == barcode){
+                if (product.getQuantity() < quantity){
+                    throw new OutOfStockException();
+                }
+                product.decreaseQuantity(quantity);
+                Product pr = product.getProduct();
+                productsList = Collections.nCopies(5, pr);
+                productFound = true;
+            }
+        }
+        if(productFound) return productsList;
+        throw new NoSuchProductException();
     }
 
     class ShopEntryImpl {
