@@ -8,7 +8,7 @@ public interface Shop {
     boolean isOpen();
     void open();
     void close();
-    Product findByName(String name) throws NoSuchShopException,ShopIsClosedException;
+    Product findByName(String name) throws NoSuchProductException,ShopIsClosedException;
     boolean hasProduct(long barcode) throws ShopIsClosedException;
     void addNewProduct(Product product,int quantity,float price) throws ProductAlreadyExistsException,ShopIsClosedException;
     void addProduct(long barcode,int quantity) throws NoSuchProductException,ShopIsClosedException;
