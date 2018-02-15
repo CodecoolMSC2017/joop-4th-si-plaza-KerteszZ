@@ -5,6 +5,7 @@ import com.codecool.plaza.api.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class CmdProgram {
     private List<Product> cart;
@@ -45,7 +46,10 @@ public class CmdProgram {
                     "4) enter a shop by name.\n " +
                     "5) to open the plaza.\n " +
                     "6) to close the plaza.\n " +
-                    "7) to check if the plaza is open or not");
+                    "7) to check if the plaza is open or not.\n " +
+                    "8) to check the content of your cart.\n " +
+                    "9) to check how much money you spent so far.\n " +
+                    "10) to exit plaza.");
             String mainMenuChoice = scan.nextLine();
             if (mainMenuChoice.equals("1")) {
                 try {
@@ -109,6 +113,40 @@ public class CmdProgram {
                 plaza.close();
                 System.out.println("Plaza is closed.");
             }
+
+            else if (mainMenuChoice.equals("7")) {
+                if (plaza.isOpen()) {
+                    System.out.println("Plaza is open!");
+                }
+                else {
+                    System.out.println("Plaza is closed.Come back later!");
+                }
+            }
+            else if (mainMenuChoice.equals("8")) {
+                if (cart.size() == 0) {
+                    System.out.println("Your cart is empty.");
+                }
+                else {
+                    showCartContent();
+                }
+            }
+            else if (mainMenuChoice.equals("9")) {
+                if (prices.size() == 0) {
+                    System.out.println("You haven't spent money yet.");
+                }
+                else {
+                    System.out.println(showSpendings());
+                }
+            }
+            else if(mainMenuChoice.equals("10")) {
+                System.out.println("Plaza session ending.\n" +
+                        "You bought: ");
+                showCartContent();
+                System.out.println("You spent: " + showSpendings() + "Ft");
+                System.out.println("Press enter to confirm exit.");
+                scan.nextLine();
+                System.exit(0);
+            }
         }
 
 
@@ -116,16 +154,51 @@ public class CmdProgram {
     }
 
     public void shopMenu(Shop shop) {
-        System.out.println("Welcome to the " + shop.getName() + " !Press");
-        System.out.println(" 1) to list available products." +
-                "\n 2) to find products by name." +
-                "\n 3) to display the shop's owner." +
-                "\n 4) to open the shop." +
-                "\n 5) to close the shop." +
-                "\n 6) to add new product to the shop." +
-                "\n 7) to add existing products to the shop." +
-                "\n 8) to buy a product by barcode." +
-                "\n 9) to check price by barcode." +
-                "\n 10) exit shop.");
+        while (true) {
+            System.out.println("Welcome to the " + shop.getName() + " !Press");
+            System.out.println(" 1) to list available products." +
+                    "\n 2) to find products by name." +
+                    "\n 3) to display the shop's owner." +
+                    "\n 4) to open the shop." +
+                    "\n 5) to close the shop." +
+                    "\n 6) to add new product to the shop." +
+                    "\n 7) to add existing products to the shop." +
+                    "\n 8) to buy a product by barcode." +
+                    "\n 9) to check price by barcode." +
+                    "\n 10) exit shop.");
+
+            String shopChoice = scan.nextLine();
+            if (shopChoice.equals("1")) {
+                try {
+                    for (Product product:shop.getProducts()) {
+                        System.out.println(product.toString());
+                    }
+
+                }catch (ShopIsClosedException ex) {
+                    System.out.println("Shop is closed");
+                }
+            }
+            else if (shopChoice.equals("2")) {
+
+            }
+
+        }
     }
+
+    public void showCartContent() {
+        for (Product product:cart) {
+            System.out.println(product.toString());
+
+        }
+    }
+
+    public float showSpendings() {
+        float spendings = 0;
+        for (Float spending:prices) {
+            spendings += spending;
+        }
+        return spendings;
+    }
+
+
 }
