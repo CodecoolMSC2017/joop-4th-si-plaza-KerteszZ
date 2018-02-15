@@ -71,9 +71,7 @@ public class ShopImpl implements Shop {
         ShopEntryImpl newProduct = new ShopEntryImpl(product,quantity,price);
         if(products.values().contains(newProduct)) throw new ProductAlreadyExistsException();
 
-        Random randomLong = new Random();
-        long barcode = 900000000 + randomLong.nextInt(100000000);
-        products.put(barcode,newProduct);
+        products.put(product.getBarcode(),newProduct);
     }
 
     @Override
