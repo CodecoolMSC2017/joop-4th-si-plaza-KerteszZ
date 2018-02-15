@@ -27,6 +27,6 @@ public class FoodProduct extends Product {
 
     @Override
     public String toString() {
-        return super.toString();
+        return super.toString() + " Calories: " + calories + " Is it consumable: " + isStillConsumeable();
     }
 }
