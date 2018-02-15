@@ -6,8 +6,10 @@ import java.util.List;
 public class PlazaImpl implements Plaza {
     private List<Shop> shops;
     private boolean isOpen;
+    private String name;
 
-    public PlazaImpl() {
+    public PlazaImpl(String name) {
+        this.name = name;
         shops = new ArrayList<>();
         isOpen = false;
     }
@@ -68,5 +70,9 @@ public class PlazaImpl implements Plaza {
     @Override
     public void close() {
         isOpen = false;
+    }
+
+    public String getName() {
+        return name;
     }
 }
