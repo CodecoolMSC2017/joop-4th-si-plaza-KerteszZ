@@ -27,7 +27,7 @@ public abstract class Product {
 
     @Override
     public String toString() {
-        return super.toString();
+        return name + " Manufacturer: " + manufacturer;
     }
 }
 
