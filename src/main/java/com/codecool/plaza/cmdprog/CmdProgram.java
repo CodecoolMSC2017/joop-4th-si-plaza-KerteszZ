@@ -2,6 +2,7 @@ package com.codecool.plaza.cmdprog;
 
 import com.codecool.plaza.api.*;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -179,7 +180,131 @@ public class CmdProgram {
                 }
             }
             else if (shopChoice.equals("2")) {
+                try {
+                    String nameOfProduct = scan.nextLine();
+                    System.out.println(shop.findByName(nameOfProduct).toString());
+                }catch (ShopIsClosedException ex) {
+                    System.out.println("Shop is closed.");
+                }catch (NoSuchProductException ex) {
+                    System.out.println("No such product with this name.");
+                }
+            }
+            else if (shopChoice.equals("3")) {
+                System.out.println(shop.getOwner());
+            }
+            else if (shopChoice.equals("4")) {
+                shop.open();
+                System.out.println("Shop is open.");
+            }
+            else if (shopChoice.equals("5")) {
+                shop.close();
+                System.out.println("Shop is closed.");
+            }
+            else if (shopChoice.equals("6")) {
+                while (true) {
+                    System.out.println("Choose the type of product to add: 1) Food 2) Clothes");
+                    String productChoice = scan.nextLine();
+                    if (productChoice.equals("1")) {
+                        System.out.println("Enter name of product.");
+                        String name = scan.nextLine();
+                        System.out.println("Enter manufacturer.");
+                        String manufacturer = scan.nextLine();
+                        System.out.println("Enter calories.");
+                        int calories = scan.nextInt();
+                        System.out.println("Enter best before date yyyy/mm/dd format please.");
+                        String bestbefore = scan.nextLine();
+                        System.out.println("Enter quantity.");
+                        int quantity = scan.nextInt();
+                        System.out.println("Enter price");
+                        float price = scan.nextInt();
 
+                        try {
+                            Product newProduct = new FoodProduct(manufacturer,name,calories,bestbefore);
+                            shop.addNewProduct(newProduct,quantity,price);
+                            break;
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }catch (ProductAlreadyExistsException ex){
+                            System.out.println("Product already in store.");
+                        }catch (ShopIsClosedException ex) {
+                            System.out.println("Shop is closed");
+                        }
+
+                    }
+                    else if (productChoice.equals("2")) {
+                        System.out.println("Enter name of product.");
+                        String name = scan.nextLine();
+                        System.out.println("Enter manufacturer.");
+                        String manufacturer = scan.nextLine();
+                        System.out.println("Enter material.");
+                        String material = scan.nextLine();
+                        System.out.println("Enter type.");
+                        String type = scan.nextLine();
+                        System.out.println("Enter quantity.");
+                        int quantity = scan.nextInt();
+                        System.out.println("Enter price");
+                        float price = scan.nextInt();
+
+                        try {
+                            Product newProduct = new ClothingProduct(manufacturer,name,material,type);
+                            shop.addNewProduct(newProduct, quantity, price);
+                            break;
+                        }catch (ProductAlreadyExistsException ex){
+                            System.out.println("Product already in store.");
+                        }catch (ShopIsClosedException ex) {
+                            System.out.println("Shop is closed");
+                        }
+                    }
+                    else {
+                        System.out.println("You entered an invalid input,please try again.");
+                    }
+                }
+            }
+            else if (shopChoice.equals("7")) {
+                System.out.println("Enter barcode of product.");
+                long barcode = scan.nextInt();
+                System.out.println("Enter amount to add.");
+                int quantity = scan.nextInt();
+                try {
+                    shop.addProduct(barcode, quantity);
+                }catch (NoSuchProductException ex) {
+                    System.out.println("No product found with this barcode.");
+                }catch (ShopIsClosedException ex) {
+                    System.out.println("Shop is closed.");
+                }
+            }
+            else if (shopChoice.equals("8")) {
+                System.out.println("Enter barcode of product to buy.");
+                long barcode = scan.nextInt();
+                try {
+                    cart.add(shop.buyProduct(barcode));
+                    prices.add(shop.getPrice(barcode));
+
+                }catch (NoSuchProductException ex) {
+                    System.out.println("No product found with that barcode.");
+                }catch (OutOfStockException ex) {
+                    System.out.println("No more items of the given product.");
+                }catch (ShopIsClosedException ex) {
+                    System.out.println("Shop is closed.");
+                }
+            }
+            else if(shopChoice.equals("9")) {
+                System.out.println("Enter barcode of the item you want the price of.");
+                long barcode = scan.nextInt();
+
+                try {
+                    System.out.println("Price of the product: " + shop.getPrice(barcode));
+                }catch (NoSuchProductException ex) {
+                    System.out.println("No product with that barcode.");
+                }catch (ShopIsClosedException ex) {
+                    System.out.println("Shop is closed.");
+                }
+            }
+            else if (shopChoice.equals("10")) {
+                break;
+            }
+            else {
+                System.out.println("Invalid input,try again please.");
             }
 
         }
