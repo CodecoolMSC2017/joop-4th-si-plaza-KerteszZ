@@ -155,6 +155,11 @@ public class ShopImpl implements Shop {
         return allProducts;
     }
 
+    @Override
+    public String toString() {
+        return name + " Owner: " + owner;
+    }
+
     private class ShopEntryImpl {
         private Product product;
         private int quantity;
@@ -200,7 +205,7 @@ public class ShopImpl implements Shop {
 
         @Override
         public String toString() {
-            return null;
+            return product.getName() + " Price: " + price + " Quantity: " + quantity ;
         }
     }
 
