@@ -133,7 +133,29 @@ public class ShopImpl implements Shop {
         throw new NoSuchProductException();
     }
 
-    class ShopEntryImpl {
+    @Override
+    public float getPrice(long barcode) throws NoSuchProductException,ShopIsClosedException{
+        if(!isOpen) throw new ShopIsClosedException();
+        for (ShopEntryImpl product:products.values()) {
+            if (product.getProduct().getBarcode() == barcode) {
+                return product.getPrice();
+            }
+
+        }
+        throw new NoSuchProductException();
+    }
+
+    @Override
+    public List<Product> getProducts() throws ShopIsClosedException{
+        if(!isOpen) throw new ShopIsClosedException();
+        List<Product> allProducts = new ArrayList<>();
+        for (ShopEntryImpl product:products.values()) {
+            allProducts.add(product.getProduct());
+        }
+        return allProducts;
+    }
+
+    private class ShopEntryImpl {
         private Product product;
         private int quantity;
         private float price;
@@ -181,4 +203,5 @@ public class ShopImpl implements Shop {
             return null;
         }
     }
+
 }
