@@ -4,8 +4,9 @@ public class ClothingProduct extends Product{
     private String material;
     private String type;
 
-    public ClothingProduct(long barcode, String manufacturer, String name,String material,String type) {
-        super(barcode, manufacturer, name);
+    public ClothingProduct(String manufacturer, String name,String material,String type) {
+        super(manufacturer, name);
+        this.barcode = generateBarcode();
         this.material = material;
         this.type = type;
     }

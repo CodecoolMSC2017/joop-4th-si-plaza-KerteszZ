@@ -11,8 +11,9 @@ public class FoodProduct extends Product {
     private Date bestBefore;
     private Date currentDate = new Date();
 
-    public FoodProduct(long barcode,String manufacturer,String name,int calories,String bestBefore) throws ParseException{
-        super(barcode,manufacturer,name);
+    public FoodProduct(String manufacturer,String name,int calories,String bestBefore) throws ParseException{
+        super(manufacturer,name);
+        this.barcode = generateBarcode();
         this.calories = calories;
         this.bestBefore = dateFormat.parse(bestBefore);
     }
