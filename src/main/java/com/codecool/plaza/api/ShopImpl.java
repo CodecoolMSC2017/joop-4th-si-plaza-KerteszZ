@@ -56,12 +56,7 @@ public class ShopImpl implements Shop {
     @Override
     public boolean hasProduct(long barcode) throws ShopIsClosedException {
         if(!isOpen()) throw new ShopIsClosedException();
-        for(ShopEntryImpl product:products.values()){
-            if(product.getProduct().getBarcode() == barcode){
-                return true;
-            }
-        }
-        return false;
+        return products.containsKey(barcode);
     }
 
     @Override
