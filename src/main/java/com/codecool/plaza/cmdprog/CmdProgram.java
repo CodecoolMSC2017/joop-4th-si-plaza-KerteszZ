@@ -209,17 +209,18 @@ public class CmdProgram {
                         String name = scan.nextLine();
                         System.out.println("Enter manufacturer.");
                         String manufacturer = scan.nextLine();
-                        System.out.println("Enter calories.");
-                        int calories = scan.nextInt();
+
                         System.out.println("Enter best before date yyyy/mm/dd format please.");
-                        String bestbefore = scan.nextLine();
+                        String bestBefore = scan.nextLine();
                         System.out.println("Enter quantity.");
                         int quantity = scan.nextInt();
+                        System.out.println("Enter calories.");
+                        int calories = scan.nextInt();
                         System.out.println("Enter price");
                         float price = scan.nextInt();
 
                         try {
-                            Product newProduct = new FoodProduct(manufacturer,name,calories,bestbefore);
+                            Product newProduct = new FoodProduct(manufacturer,name,calories,bestBefore);
                             shop.addNewProduct(newProduct,quantity,price);
                             break;
                         } catch (ParseException e) {
@@ -228,7 +229,9 @@ public class CmdProgram {
                             System.out.println("Product already in store.");
                         }catch (ShopIsClosedException ex) {
                             System.out.println("Shop is closed");
+                            break;
                         }
+                        break;
 
                     }
                     else if (productChoice.equals("2")) {
@@ -253,6 +256,7 @@ public class CmdProgram {
                             System.out.println("Product already in store.");
                         }catch (ShopIsClosedException ex) {
                             System.out.println("Shop is closed");
+                            break;
                         }
                     }
                     else {
